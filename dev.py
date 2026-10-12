@@ -1,13 +1,18 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-#author tom
+import os
+
+
 class DEVConfig(object):
-    DEBUG=True
-    # SECRET_KEY='wocao' #session秘钥
-    # 数据库配置
-    # '数据库类型://账号:密码@数据库IP:端口/数据库名'
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456@39.106.144.73:3306/test'
-    # 动态追踪修改设置，如未设置只会提示警告
+    DEBUG = True
+
+    # 数据库连接串从环境变量读取；本地开发请复制 .env.example 为 .env 再填自己的库
+    # 格式：mysql+pymysql://<账号>:<密码>@<IP>:<端口>/<库名>
+    SQLALCHEMY_DATABASE_URI = os.environ.get(
+        "DATABASE_URL",
+        "mysql+pymysql://user:password@127.0.0.1:3306/face_attendance",
+    )
+
+    # 动态追踪修改设置，未设置只会提示警告
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    # 查询时会显示原始SQL语句
-    SQLALCHEMY_ECHO = True
+
+    # 查询时是否打印原始 SQL
+    SQLALCHEMY_ECHO = os.environ.get("SQLALCHEMY_ECHO", "0") == "1"
